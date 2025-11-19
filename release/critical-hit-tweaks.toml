@@ -1,0 +1,4 @@
+[Settings]
+fDefaultMagicCritChance = 0.0
+fDefaultCritMagicModifier = 1.5
+fDefaultMeleeCritChance = 3.0
