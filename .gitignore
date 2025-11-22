@@ -6,6 +6,7 @@
 .xmake/
 
 # folders
+dist/
 build/
 vs*/
 

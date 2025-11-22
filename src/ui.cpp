@@ -22,6 +22,20 @@ void RestoreFromSettings()
 
     default_crit_chance_magic = set::default_crit_chance_magic.GetValue();
     default_crit_damage_magic = set::default_crit_damage_magic.GetValue();
+    default_crit_damage_melee = set::default_crit_damage_melee.GetValue();
+}
+
+void ResetDefaults()
+{
+    using set = Config::Settings;
+    using namespace Settings::Var;
+    default_crit_chance_magic = 0.0f;
+    default_crit_damage_magic = 1.0f;
+    default_crit_damage_melee = 1.0f;
+
+    set::default_crit_chance_magic.SetValue(default_crit_chance_magic);
+    set::default_crit_damage_magic.SetValue(default_crit_damage_magic);
+    set::default_crit_damage_melee.SetValue(default_crit_damage_melee);
 }
 
 void RenderSystem()
@@ -41,16 +55,7 @@ void RenderSystem()
     }
 }
 
-void ResetDefaults()
-{
-    using set = Config::Settings;
-    using namespace Settings::Var;
-    default_crit_chance_magic = 0.0f;
-    default_crit_damage_magic = 1.0f;
 
-    set::default_crit_chance_magic.SetValue(default_crit_chance_magic);
-    set::default_crit_damage_magic.SetValue(default_crit_damage_magic);
-}
 
 namespace Settings
 {
@@ -63,16 +68,25 @@ void __stdcall RenderSettings()
     ImGui::NewLine();
 
     ImGui::SetNextItemWidth(200.f);
-    if (ImGui::SliderFloat(Label::default_crit_chance_magic.c_str(), &Var::default_crit_chance_magic, 0.0, 100.0))
+    if (ImGui::SliderFloat(Label::default_crit_chance_magic.c_str(), &Var::default_crit_chance_magic, 0.0, 100.0, "%.2f"))
         set::default_crit_chance_magic.SetValue(Var::default_crit_chance_magic);
     ImGui::SameLine();
     ux::HelpMarker(Tool::default_crit_chance_magic.c_str());
 
     ImGui::SetNextItemWidth(200.f);
-    if (ImGui::SliderFloat(Label::default_crit_damage_magic.c_str(), &Var::default_crit_damage_magic, 1.0f, 10.f))
+    if (ImGui::SliderFloat(Label::default_crit_damage_magic.c_str(), &Var::default_crit_damage_magic, 1.0f, 4.f, "%.2f"))
         set::default_crit_damage_magic.SetValue(Var::default_crit_damage_magic);
     ImGui::SameLine();
     ux::HelpMarker(Tool::default_crit_damage_magic.c_str());
+
+    ImGui::Text(Titles::MELEE_SETTING.c_str());
+    ImGui::NewLine();
+
+    ImGui::SetNextItemWidth(200.f);
+    if (ImGui::SliderFloat(Label::default_crit_damage_melee.c_str(), &Var::default_crit_damage_melee, 1.0f, 4.0f, "%.2f"))
+        set::default_crit_damage_melee.SetValue(Var::default_crit_damage_melee);
+    ImGui::SameLine();
+    ux::HelpMarker(Tool::default_crit_damage_melee.c_str());
 
     // Settings
     RenderSystem();

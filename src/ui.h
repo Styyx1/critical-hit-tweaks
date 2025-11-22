@@ -23,18 +23,22 @@ namespace Menu {
 	namespace Settings {
 		namespace Titles {
 			inline std::string MAGIC_SETTING = "Magic Critical Hits";
+			inline std::string MELEE_SETTING = "Melee Critical Hits";
 		}
 		namespace Label {
 			inline std::string default_crit_chance_magic = "Default Critical Hit Chance";
-			inline std::string default_crit_damage_magic = "Default Crit Damage Modifier";
+			inline std::string default_crit_damage_magic = "Default Crit Damage Modifier Magic";
+			inline std::string default_crit_damage_melee = "Default Crit Damage Modifier Weapons";
 		}
 		namespace Tool {
 			inline std::string default_crit_chance_magic = "Default Chance to land a critical hit with any playable spell.";
 			inline std::string default_crit_damage_magic = "Default modifier for magic critical hits";
+			inline std::string default_crit_damage_melee = "Default modifier for critical hits with weapons";
 		}
 		namespace Var {
 			inline float default_crit_chance_magic;
 			inline float default_crit_damage_magic;
+			inline float default_crit_damage_melee;
 		}
 		void __stdcall RenderSettings();
 	}

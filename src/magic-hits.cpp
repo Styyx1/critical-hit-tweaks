@@ -1,6 +1,5 @@
 #include "magic-hits.h"
 #include "settings.h"
-#include "util.h"
 namespace MagicHits
 {
 
@@ -21,13 +20,12 @@ void Critical::ApplyPerkEntrySpellMag(RE::BGSPerkEntry::EntryPoint a_entry, RE::
             float damage_modifier = Config::Settings::default_crit_damage_magic.GetValue();
             float base_damage = damage;
 
-            //the game handles it fairly accurate and it results basically in the same as any manual calcs i did before
+            // the game handles it fairly accurate and it results basically in the same as any manual calcs i did before
             RE::BGSEntryPoint::HandleEntryPoint(RE::BGSEntryPoint::ENTRY_POINT::kCalculateMyCriticalHitDamage, caster,
-                spell, target, &damage);
+                                                spell, target, &damage);
 
-            //if i want some extra damage modifier, i think about only applying it if the player has no perks that modify crit damage
-            if(damage == base_damage)
-                damage *= damage_modifier;
+            // if i want some extra damage modifier, i think about only applying it if the player has no perks that modify crit damage
+            damage *= damage_modifier;
 
             REX::DEBUG("damage is: {}", damage);
 
