@@ -46,7 +46,7 @@ void ResetDefaults()
     using set = Config::Settings;
     using namespace Settings::Var;
     default_crit_chance_magic = 0.0f;
-    default_crit_damage_magic = 1.5f;
+    default_crit_damage_magic = 1.0f;
 
     set::default_crit_chance_magic.SetValue(default_crit_chance_magic);
     set::default_crit_damage_magic.SetValue(default_crit_damage_magic);
@@ -69,7 +69,7 @@ void __stdcall RenderSettings()
     ux::HelpMarker(Tool::default_crit_chance_magic.c_str());
 
     ImGui::SetNextItemWidth(200.f);
-    if (ImGui::SliderFloat(Label::default_crit_damage_magic.c_str(), &Var::default_crit_damage_magic, 1.5f, 10.f))
+    if (ImGui::SliderFloat(Label::default_crit_damage_magic.c_str(), &Var::default_crit_damage_magic, 1.0f, 10.f))
         set::default_crit_damage_magic.SetValue(Var::default_crit_damage_magic);
     ImGui::SameLine();
     ux::HelpMarker(Tool::default_crit_damage_magic.c_str());

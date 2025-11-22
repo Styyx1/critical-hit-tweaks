@@ -1,7 +1,9 @@
 #include "magic-hits.h"
 #include "settings.h"
+#include "util.h"
 namespace MagicHits
 {
+
 void Critical::ApplyPerkEntrySpellMag(RE::BGSPerkEntry::EntryPoint a_entry, RE::Actor *caster, RE::SpellItem *spell,
                                       RE::Actor *target, float &damage)
 {
@@ -11,41 +13,30 @@ void Critical::ApplyPerkEntrySpellMag(RE::BGSPerkEntry::EntryPoint a_entry, RE::
     RE::BGSEntryPoint::HandleEntryPoint(RE::BGSEntryPoint::ENTRY_POINT::kCalculateMyCriticalHitChance, caster, spell,
                                         target, std::addressof(chance));
 
-    
     if (chance > 0)
     {
         auto calc = RandomiserUtil::GetRandomFloat(0.f, 100.f);
         if (calc <= chance && MagicUtil::IsSpellPlayable(spell))
         {
             float damage_modifier = Config::Settings::default_crit_damage_magic.GetValue();
-            RE::BGSEntryPoint::HandleEntryPoint(RE::BGSEntryPoint::ENTRY_POINT::kCalculateMyCriticalHitDamage, caster, spell,
-                target, std::addressof(damage_modifier));
+            float base_damage = damage;
 
-            damage *= damage_modifier;
+            //the game handles it fairly accurate and it results basically in the same as any manual calcs i did before
+            RE::BGSEntryPoint::HandleEntryPoint(RE::BGSEntryPoint::ENTRY_POINT::kCalculateMyCriticalHitDamage, caster,
+                spell, target, &damage);
+
+            //if i want some extra damage modifier, i think about only applying it if the player has no perks that modify crit damage
+            if(damage == base_damage)
+                damage *= damage_modifier;
+
+            REX::DEBUG("damage is: {}", damage);
 
             const RE::CriticalHit::Event event{caster, nullptr, false};
             RE::CriticalHit::GetEventSource()->SendEvent(&event);
-            const std::string crit_msg = std::format("{} {}", MiscUtil::GetGameSetting("sCriticalStrike")->GetString(), target->GetName());
+            const std::string crit_msg =
+                std::format("{} {}", MiscUtil::GetGameSetting("sCriticalStrike")->GetString(), target->GetName());
             RE::DebugNotification(crit_msg.c_str(), "UISneakAttack");
         }
     }
-}
-
-er OnCriticalHit::ProcessEvent(const RE::CriticalHit::Event* event, RE::BSTEventSource<RE::CriticalHit::Event>* src)
-{
-    if (!event)
-        return er::kContinue;
-    if (!event->aggressor) 
-        return er::kContinue;    
-
-    REX::INFO("crit event happened for: {}", event->aggressor->GetName());
-
-    return er::kContinue;
-}
-void OnCriticalHit::Register()
-{
-    auto src = RE::CriticalHit::GetEventSource();
-    src->AddEventSink(this);
-    REX::INFO("Registered for Critical Hit Event");
 }
 } // namespace MagicHits
