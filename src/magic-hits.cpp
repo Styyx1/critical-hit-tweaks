@@ -28,12 +28,14 @@ void Critical::ApplyPerkEntrySpellMag(RE::BGSPerkEntry::EntryPoint a_entry, RE::
             damage *= damage_modifier;
 
             REX::DEBUG("damage is: {}", damage);
-
-            const RE::CriticalHit::Event event{caster, nullptr, false};
-            RE::CriticalHit::GetEventSource()->SendEvent(&event);
-            const std::string crit_msg =
-                std::format("{} {}", MiscUtil::GetGameSetting("sCriticalStrike")->GetString(), target->GetName());
-            RE::DebugNotification(crit_msg.c_str(), "UISneakAttack");
+            if (caster) {
+                const RE::CriticalHit::Event event{ caster, nullptr, false };
+                RE::CriticalHit::GetEventSource()->SendEvent(&event);
+                const std::string crit_msg =
+                    std::format("{} {}", MiscUtil::GetGameSetting("sCriticalStrike")->GetString(), target->GetName());
+                RE::DebugNotification(crit_msg.c_str(), "UISneakAttack");
+            }
+            
         }
     }
 }
